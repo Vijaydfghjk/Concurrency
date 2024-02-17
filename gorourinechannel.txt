@@ -1,0 +1,46 @@
+package main
+
+import (
+	"fmt"
+)
+
+func demo(a <-chan struct{}, b <-chan struct{}) {
+
+	for {
+		select {
+
+		case i := <-a:
+			fmt.Println("struct data", i)
+		case k := <-b:
+			fmt.Println("from k", k)
+			return
+
+		}
+
+	}
+}
+
+func main() {
+
+	var c chan struct{} = make(chan struct{})
+	var d chan struct{} = make(chan struct{})
+
+	go demo(c, d)
+
+	type data struct {
+	}
+	d <- data{}
+
+}
+
+/*
+
+ ***process***
+
+1 . go demo(c, d) calling
+2.  loop will keep on running main will stopping the loop
+3. select case will execute any one of the channel which is ready to receive
+
+
+
+*/

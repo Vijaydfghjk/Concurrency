@@ -1,0 +1,96 @@
+
+ RAM <- CPU -> Storage
+
+      Os kernel
+           |
+
+ runtime   runtime  runtime 
+
+  goapp     goapp     goapp
+
+
+before even getting to run your program  Go is going to  inspect the cpu for how many logical cores that i got and it's going to take that number and use it own way.
+
+thread is basically bag or box
+
+Thread 1     Thread 2   Thread 3
+task1        task1      task1
+task2        task2      task2
+
+
+
+                 OS                         
+      |                             |
+userlevel thread        kernel level threads
+
+
+      vj                  Thease threads managed by
+thread1  thread2                       | kernel os we can't access
+
+alllocated by go application
+
+
+Thread 1          logical core execute 
+ task1   1s        task3
+ task2   0.2s      task4 
+ task3   0s        task2
+ task4   0.1s      task1
+
+
+concurrency is dealing with lot of things or task at the same time. 
+parallelism is doing a lot of things at the same time.
+
+coucurrency ********************
+
+cpu will have some kind of ticker  
+
+ task1   1s     t 5millisceond    
+ task2   0.2s   t 5millisceond  
+ task3   0s     t 5millisceond   
+ task4   0.1s   t 5millisceond
+
+
+first 
+ 
+task3
+task4
+task2
+taks1
+
+parallelism ************************
+
+ core1
+
+ task1   1s     t 5millisceond    task5 t 0.5s
+ task2   0.2s   t 5millisceond    task6 t 0.3s
+ task3   0s     t 5millisceond    task7 t 0.1s
+ task4   0.1s   t 5millisceond    task8 t 0.2s
+
+t will execute task3 and task7 t
+               task4 and task t
+
+like that.
+
+context of a cpu and basically context switching between tasks until those task inside thread
+are the completed.
+
+tacking the concurrency process and applying it on multiple cores on multiple machines
+
+
+Go runtime 
+
+1.garbage collector
+2.scheduler all the resources which go when is going to execute.
+3.Go runtime also the go scheduler so bacially it will basically create the thread and it will execute
+ and schedule those goroutines.
+
+4.threads it will make sure those have distributed amount of work qqually which is 
+
+    core 1 and core 2 have equality of task.
+
+5.Go scheduler intract with os kernal.
+
+6.
+
+
+

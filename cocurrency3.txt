@@ -1,0 +1,23 @@
+1.The select statement is designed to manage multiple channels concurrently, while WaitGroups coordinate the completion of goroutines.
+
+
+
+3. Three ways to make the goroutine.
+
+1. go func (){
+
+
+
+  }()
+
+
+2. go function name()
+
+
+
+3. go func (){
+
+
+        function name
+
+  }

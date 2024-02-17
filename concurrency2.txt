@@ -1,0 +1,95 @@
+1 main is  gorourine 
+
+2. fork join model.
+
+why main function doesnot wait for the goroutine?
+
+    main
+
+     |
+
+     *
+     * * * *>  child this is running in separate process
+                |
+     * *  *  child  need to join with main. - here this child not with main that's what we using   weightgroup.
+
+appllying the fork join model we have two option;
+  1. channel
+  2. waitgroup
+
+
+2. Concurrency issue
+
+  1.race condition
+
+  is when mulitiple pices of concurrent code try to access some kind of shared data
+  
+  2. deasklocks
+     when process wait for one another forever
+
+  3 livelocks
+      
+  4 stravation
+  5 code complexity
+
+3. Details in Waitgroup.
+
+  waitgroup
+  mutex
+  cond
+  map
+  pool
+  Rwmutex
+  Locker
+
+
+   main 
+
+    |
+    |********  task1
+                 |
+               task2
+                 |
+   end********* task3
+    |
+   task4
+
+
+1. craete the waitgroup
+2. you have to call method add
+3. inside each goroutine weneed call method done.
+4. finally need to call method wait.
+
+
+Error 
+
+1.  if we don't use wg.Add() main will not execte the groutine.
+
+2.  if we don't use wg.done() inside goroutine we get deadlock error.
+
+3. package main
+
+import "sync"
+
+func main(){
+
+	var wg sync.WaitGroup
+
+	wg.Done()
+}
+
+getting an panic error nagative waitgroup counter.
+
+
+wg.Done() this calls add method add(-1)
+
+
+4. we shound allways pass the waitgroup as pointer not value.
+
+
+Note : panic happens faster than main exits. normally main would not wait for the goroutine.
+
+    
+
+
+     
