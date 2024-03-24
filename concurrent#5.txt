@@ -1,0 +1,33 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	done1 := make(chan struct{})
+	done2 := make(chan struct{})
+	done3 := make(chan struct{})
+
+	go func() {
+		defer close(done1)
+		fmt.Println("1")
+	}()
+
+	go func() {
+		<-done1
+		defer close(done2)
+		fmt.Println("2")
+	}()
+
+	go func() {
+		<-done2
+		defer close(done3)
+		fmt.Println("3")
+	}()
+
+	// Wait for all goroutines to complete
+	<-done1
+	<-done2
+	<-done3
+}
