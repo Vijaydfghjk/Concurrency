@@ -1,0 +1,36 @@
+// You can edit this code!
+// Click here and start typing.
+package main
+
+import (
+	"fmt"
+)
+
+func oddnumber(a int) {
+
+	var dum chan int = make(chan int)
+
+	go func() {
+
+		dum <- a
+		close(dum)
+	}()
+
+	for value := range dum {
+
+		if value%2 != 0 {
+
+			fmt.Println("values:", value)
+		}
+	}
+
+}
+
+func main() {
+
+	for i := 0; i <= 10; i++ {
+
+		oddnumber(i)
+	}
+
+}
