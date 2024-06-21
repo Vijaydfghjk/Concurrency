@@ -1,0 +1,61 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+
+//mutex acts as a gatekeeper, ensuring that only one goroutine accesses the critical section (shared data) at any given time
+
+var mutex sync.Mutex
+
+func Worker(id int, jobs <-chan int, results chan<- int) {
+	mutex.Lock()
+	for job := range jobs {
+
+		fmt.Printf("Worker %d processing job %d\n", id, job)
+		results <- job * 2
+
+	}
+	mutex.Unlock()
+
+}
+
+func main() {
+
+	var wg sync.WaitGroup
+
+	numJobs := 10
+	numWorkers := 3
+
+	jobs := make(chan int, numJobs)
+	results := make(chan int, numJobs)
+
+	wg.Add(numWorkers)
+	for i := 1; i <= numWorkers; i++ {
+		//wg.Add(1)
+		go func(workerid int) {
+			defer wg.Done()
+			Worker(workerid, jobs, results)
+		}(i)
+	}
+
+	for i := 1; i <= 10; i++ {
+
+		jobs <- i
+	}
+	close(jobs)
+	go func() {
+
+		wg.Wait()
+		close(results)
+
+	}()
+
+	for v := range results {
+
+		fmt.Printf("Result: %d\n", v)
+	}
+
+}
