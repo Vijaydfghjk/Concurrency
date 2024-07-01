@@ -1,0 +1,44 @@
+// You can edit this code!
+// Click here and start typing.
+package main
+
+import "fmt"
+
+func generateNumbers(ch chan<- int) {
+
+	for i := 1; i <= 10; i++ {
+
+		ch <- i
+
+	}
+
+	close(ch)
+}
+
+func calculateSquares(value <-chan int, temp chan<- int) {
+
+	for get := range value {
+
+		temp <- get * get
+	}
+	close(temp)
+
+}
+func main() {
+
+	value := make(chan int)
+	ch := make(chan int)
+
+	go generateNumbers(ch)
+	go calculateSquares(ch, value)
+
+	devider := 1
+	for num := range value {
+
+		fmt.Printf("Number: %d | Square: %d \n", num/devider, num)
+		devider += 1
+		//fmt.Println(num)
+
+	}
+
+}
