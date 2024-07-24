@@ -1,0 +1,51 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+
+	data := []int{1, 2, 3, 4, 5}
+	take := make(chan int, len(data))
+	result := make(chan int, len(data))
+
+	for _, v := range data {
+
+		take <- v
+	}
+	close(take)
+
+	num := 3
+	var wg sync.WaitGroup
+
+	for i := 0; i < num; i++ {
+
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+
+			for input := range take {
+
+				result <- input * 2
+
+				fmt.Printf("Gorutine %v took %v\n", i, input*2)
+			}
+
+		}()
+
+	}
+
+	wg.Wait()
+
+	close(result)
+
+	for get := range result {
+
+		fmt.Println("Values", get)
+
+	}
+
+}
