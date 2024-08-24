@@ -153,4 +153,9 @@ func main() {
  out put error only.
 
 
-   
+   12. Why close ?
+
+    close function is basically using for when multiple values sending to the channel 
+    gorourine telling to channel there no more values to sent. and receiver come to know that.
+
+
