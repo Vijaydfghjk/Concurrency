@@ -159,3 +159,7 @@ func main() {
     gorourine telling to channel there no more values to sent. and receiver come to know that.
 
 
+13. Wht is Mutex?
+
+In Go, a mutex (short for "mutual exclusion") is a synchronization primitive used to protect shared resources from concurrent access by multiple goroutines. It ensures that only one goroutine can access a critical section of code at a time, preventing data races and ensuring data integrity.
+
