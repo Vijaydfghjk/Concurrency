@@ -1,0 +1,40 @@
+// You can edit this code!
+// Click here and start typing.
+package main
+
+import "fmt"
+
+func main() {
+
+	var value chan int = make(chan int, 4)
+
+	go func() {
+		for i := 1; i <= 8; i++ {
+
+			value <- i
+		}
+
+		close(value)
+	}()
+
+	var receive chan int = make(chan int, 8)
+
+	for v := range value {
+
+		receive <- v
+
+	}
+	close(receive)
+
+	for a := range receive {
+
+		if a%2 == 0 {
+
+			fmt.Printf("Even number :%d\n", a)
+
+		} else {
+
+			fmt.Printf("odd number  :%d\n", a)
+		}
+	}
+}
