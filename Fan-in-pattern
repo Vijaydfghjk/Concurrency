@@ -1,0 +1,67 @@
+// You can edit this code!
+// Click here and start typing.
+
+
+//The fan-in pattern combines multiple inputs into one single output channel. Basically, we multiplex our inputs.
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func generateWork(works []int) <-chan int {
+
+	ch := make(chan int)
+	go func() {
+
+		for _, val := range works {
+
+			ch <- val
+
+		}
+
+		close(ch)
+
+	}()
+
+	return ch
+}
+
+func fanin(inputs ...<-chan int) <-chan int {
+
+	var out chan int = make(chan int)
+	var wg sync.WaitGroup
+	wg.Add(len(inputs))
+	for _, val := range inputs {
+		go func(ch <-chan int) {
+
+			for value := range ch {
+				out <- value
+			}
+			defer wg.Done()
+
+		}(val)
+
+	}
+
+	go func() {
+
+		wg.Wait()
+		close(out)
+	}()
+
+	return out
+}
+func main() {
+	i1 := generateWork([]int{0, 2, 6, 8})
+	i2 := generateWork([]int{1, 3, 5, 7})
+
+	final := fanin(i1, i2)
+
+	for get := range final {
+
+		fmt.Println(get)
+	}
+}
