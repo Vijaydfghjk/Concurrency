@@ -1,0 +1,52 @@
+// You can edit this code!
+// Click here and start typing.
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func Signal(a chan string) {
+
+	arr := []string{"Red", "yellow", "orange"}
+	for {
+		for _, v := range arr {
+
+			a <- v
+
+			time.Sleep(2 * time.Second)
+		}
+
+	}
+}
+func check(b chan string) {
+
+	for {
+		check := <-b
+		switch check {
+
+		case "Red":
+
+			fmt.Println("vechile crossing red light")
+		case "yellow":
+
+			fmt.Println("vechile crossing yellow light")
+		case "orange":
+
+			fmt.Println("vechile crossing orange light")
+
+		}
+
+	}
+}
+
+func main() {
+
+	var mine chan string = make(chan string)
+
+	go Signal(mine)
+	go check(mine)
+
+	select {}
+}
