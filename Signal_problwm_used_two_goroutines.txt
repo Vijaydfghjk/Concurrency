@@ -1,0 +1,55 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func Signal(get chan string, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+	arr := []string{"Red", "Yellow", "Orange"}
+
+	for _, v := range arr {
+
+		get <- v
+
+	}
+
+	close(get)
+}
+
+func check(receive chan string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for get := range receive {
+
+		switch get {
+
+		case "Red":
+
+			fmt.Println("vechile crossing the red")
+		case "Yellow":
+
+			fmt.Println("vechile crossing the yellow")
+		case "Orange":
+
+			fmt.Println("vechile crossing the orange")
+		}
+	}
+
+}
+
+func main() {
+
+	var process chan string = make(chan string)
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go Signal(process, &wg)
+	go check(process, &wg)
+
+	wg.Wait()
+
+   // wg.Done(): This is called within the goroutine to decrement the WaitGroup counter, signaling that the goroutine has completed its work.
+
+}
